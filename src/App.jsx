@@ -43,6 +43,10 @@ const App = () => {
     });
   };
 
+  const handleDelete = (index) => {
+    setRightItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSave = () => {
     localStorage.setItem('rightItems', JSON.stringify(rightItems));
     alert('Items saved to localStorage!');
@@ -100,9 +104,15 @@ const App = () => {
               margin: '5px',
               backgroundColor: '#c0c0c0',
               cursor: 'grab',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
             {item}
+            <button onClick={() => handleDelete(index)} style={{ marginLeft: '10px' }}>
+              Delete
+            </button>
           </div>
         ))}
       </div>
