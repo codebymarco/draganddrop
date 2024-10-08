@@ -5,18 +5,25 @@ const App = () => {
   const [rightItems, setRightItems] = useState([]);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
   const [selectedItemInfo, setSelectedItemInfo] = useState({ index: null, value: null });
+  const [rightDivBgColor, setRightDivBgColor] = useState('#c0c0c0');
+  const [showRightDivInfo, setShowRightDivInfo] = useState(false);
 
   useEffect(() => {
-    // Load saved items from localStorage when the component mounts
+    // Load saved items and background color from localStorage when the component mounts
     const savedItems = JSON.parse(localStorage.getItem('rightItems'));
+    const savedBgColor = localStorage.getItem('rightDivBgColor');
+
     if (savedItems) {
       setRightItems(savedItems);
     }
+
+    if (savedBgColor) {
+      setRightDivBgColor(savedBgColor);
+    }
   }, []);
 
-  const handleDragStart = (e, item, index) => {
+  const handleDragStart = (e, item) => {
     e.dataTransfer.setData('text/plain', item);
-    setDraggedItemIndex(index);
   };
 
   const handleDrop = (e) => {
@@ -49,11 +56,25 @@ const App = () => {
 
   const handleSave = () => {
     localStorage.setItem('rightItems', JSON.stringify(rightItems));
-    alert('Items saved to localStorage!');
+    localStorage.setItem('rightDivBgColor', rightDivBgColor); // Save background color
+    alert('Items and background color saved to localStorage!');
   };
 
-  const handleItemClick = (index, item) => {
+  // Handle item click, preventing it from triggering the right div click
+  const handleItemClick = (e, index, item) => {
+    e.stopPropagation(); // Stop event from bubbling up to the right div
     setSelectedItemInfo({ index, value: item });
+    setShowRightDivInfo(false); // Hide right div info when item is clicked
+  };
+
+  const handleRightDivClick = () => {
+    setShowRightDivInfo(true); // Show right div info when right div is clicked
+  };
+
+  const handleBgColorChange = (e) => {
+    const newColor = e.target.value;
+    setRightDivBgColor(newColor);
+    localStorage.setItem('rightDivBgColor', newColor); // Save the new background color
   };
 
   return (
@@ -90,9 +111,13 @@ const App = () => {
           width: '200px',
           height: '400px',
           border: '1px solid black',
+          display:'flex',
+          flexDirection:'column',
           padding: '10px',
           overflowY: 'scroll',
+          backgroundColor: rightDivBgColor, // Background color is dynamic
         }}
+        onClick={handleRightDivClick} // Click handler for the right div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
@@ -104,7 +129,7 @@ const App = () => {
             onDragStart={(e) => handleDragStart(e, item, index)}
             onDrop={(e) => handleSortDrop(e, index)}
             onDragOver={handleDragOver}
-            onClick={() => handleItemClick(index, item)}
+            onClick={(e) => handleItemClick(e, index, item)} // Click handler for items
             style={{
               padding: '5px',
               margin: '5px',
@@ -131,8 +156,18 @@ const App = () => {
           padding: '10px',
         }}
       >
-        <h3>Selected Item Info</h3>
-        {selectedItemInfo.index !== null ? (
+        <h3>Selected Info</h3>
+        {showRightDivInfo ? (
+          <div>
+            <p>Right Div Background Color: {rightDivBgColor}</p>
+            <input
+              type="color"
+              value={rightDivBgColor}
+              onChange={handleBgColorChange}
+              style={{ marginTop: '10px' }}
+            />
+          </div>
+        ) : selectedItemInfo.index !== null ? (
           <div>
             <p>Index: {selectedItemInfo.index}</p>
             <p>Value: {selectedItemInfo.value}</p>
