@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const App = () => {
   const [leftItems, setLeftItems] = useState(['Item 1', 'Item 2', 'Item 3']);
   const [rightItems, setRightItems] = useState([]);
+  const [draggedItemIndex, setDraggedItemIndex] = useState(null);
 
   useEffect(() => {
     // Load saved items from localStorage when the component mounts
@@ -12,17 +13,34 @@ const App = () => {
     }
   }, []);
 
-  const handleDragStart = (e, item) => {
+  const handleDragStart = (e, item, index) => {
     e.dataTransfer.setData('text/plain', item);
+    setDraggedItemIndex(index);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     const item = e.dataTransfer.getData('text/plain');
-    // Check if the item is already in rightItems to prevent duplicates
     if (!rightItems.includes(item)) {
       setRightItems((prev) => [...prev, item]);
     }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleSortDrop = (e, index) => {
+    e.preventDefault();
+    const item = e.dataTransfer.getData('text/plain');
+    const draggedOverItem = rightItems[index];
+
+    // Rearrange the items
+    setRightItems((prev) => {
+      const newItems = prev.filter((i) => i !== item);
+      newItems.splice(index, 0, item);
+      return newItems;
+    });
   };
 
   const handleSave = () => {
@@ -67,11 +85,23 @@ const App = () => {
           overflowY: 'scroll',
         }}
         onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
+        onDragOver={handleDragOver}
       >
         <h3>Right Div (Dropped Items)</h3>
         {rightItems.map((item, index) => (
-          <div key={index} style={{ padding: '5px', margin: '5px', backgroundColor: '#c0c0c0' }}>
+          <div
+            key={index}
+            draggable
+            onDragStart={(e) => handleDragStart(e, item, index)}
+            onDrop={(e) => handleSortDrop(e, index)}
+            onDragOver={handleDragOver}
+            style={{
+              padding: '5px',
+              margin: '5px',
+              backgroundColor: '#c0c0c0',
+              cursor: 'grab',
+            }}
+          >
             {item}
           </div>
         ))}
