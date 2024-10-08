@@ -19,8 +19,10 @@ const App = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     const item = e.dataTransfer.getData('text/plain');
-    setRightItems((prev) => [...prev, item]);
-    setLeftItems((prev) => prev.filter((i) => i !== item));
+    // Check if the item is already in rightItems to prevent duplicates
+    if (!rightItems.includes(item)) {
+      setRightItems((prev) => [...prev, item]);
+    }
   };
 
   const handleSave = () => {
