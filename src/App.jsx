@@ -4,6 +4,7 @@ const App = () => {
   const [leftItems, setLeftItems] = useState(['Item 1', 'Item 2', 'Item 3']);
   const [rightItems, setRightItems] = useState([]);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
+  const [selectedItemInfo, setSelectedItemInfo] = useState({ index: null, value: null });
 
   useEffect(() => {
     // Load saved items from localStorage when the component mounts
@@ -33,7 +34,6 @@ const App = () => {
   const handleSortDrop = (e, index) => {
     e.preventDefault();
     const item = e.dataTransfer.getData('text/plain');
-    const draggedOverItem = rightItems[index];
 
     // Rearrange the items
     setRightItems((prev) => {
@@ -50,6 +50,10 @@ const App = () => {
   const handleSave = () => {
     localStorage.setItem('rightItems', JSON.stringify(rightItems));
     alert('Items saved to localStorage!');
+  };
+
+  const handleItemClick = (index, item) => {
+    setSelectedItemInfo({ index, value: item });
   };
 
   return (
@@ -80,6 +84,7 @@ const App = () => {
           </div>
         ))}
       </div>
+
       <div
         style={{
           width: '200px',
@@ -99,6 +104,7 @@ const App = () => {
             onDragStart={(e) => handleDragStart(e, item, index)}
             onDrop={(e) => handleSortDrop(e, index)}
             onDragOver={handleDragOver}
+            onClick={() => handleItemClick(index, item)}
             style={{
               padding: '5px',
               margin: '5px',
@@ -116,6 +122,26 @@ const App = () => {
           </div>
         ))}
       </div>
+
+      <div
+        style={{
+          width: '200px',
+          height: '400px',
+          border: '1px solid black',
+          padding: '10px',
+        }}
+      >
+        <h3>Selected Item Info</h3>
+        {selectedItemInfo.index !== null ? (
+          <div>
+            <p>Index: {selectedItemInfo.index}</p>
+            <p>Value: {selectedItemInfo.value}</p>
+          </div>
+        ) : (
+          <p>No item selected</p>
+        )}
+      </div>
+
       <button onClick={handleSave} style={{ marginTop: '20px' }}>
         Save
       </button>
