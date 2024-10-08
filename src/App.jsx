@@ -29,9 +29,9 @@ const App = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     const item = e.dataTransfer.getData('text/plain');
-    if (!rightItems.includes(item)) {
-      setRightItems((prev) => [...prev, item]);
-    }
+    
+    // Allow duplicate items to be added
+    setRightItems((prev) => [...prev, item]);
   };
 
   const handleDragOver = (e) => {
