@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 const App = () => {
-  const [leftItems, setLeftItems] = useState(['Item 1', 'Item 2', 'Item 3']);
+  const [leftItems] = useState(['Item 1', 'Item 2', 'Item 3']);
   const [rightItems, setRightItems] = useState([]);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
+  const [draggedItemValue, setDraggedItemValue] = useState(null);
   const [selectedItemInfo, setSelectedItemInfo] = useState({ index: null, value: null });
   const [rightDivBgColor, setRightDivBgColor] = useState('#c0c0c0');
   const [showRightDivInfo, setShowRightDivInfo] = useState(false);
 
   useEffect(() => {
-    // Load saved items and background color from localStorage when the component mounts
     const savedItems = JSON.parse(localStorage.getItem('rightItems'));
     const savedBgColor = localStorage.getItem('rightDivBgColor');
 
@@ -22,32 +22,53 @@ const App = () => {
     }
   }, []);
 
-  const handleDragStart = (e, item) => {
-    e.dataTransfer.setData('text/plain', item);
+  const handleDragStart = (e, item, source, index = null) => {
+    e.dataTransfer.effectAllowed = 'move';
+    
+    if (source === 'left') {
+      setDraggedItemValue(item);
+      setDraggedItemIndex(null); // No index from the left div
+    } else if (source === 'right') {
+      setDraggedItemIndex(index);
+      setDraggedItemValue(item); // Store item and index when dragging from right
+    }
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const item = e.dataTransfer.getData('text/plain');
-    
-    // Allow duplicate items to be added
-    setRightItems((prev) => [...prev, item]);
+    if (draggedItemIndex === null && draggedItemValue) {
+      // It's an item from the left div (new addition)
+      setRightItems((prevItems) => [...prevItems, draggedItemValue]);
+    }
+    setDraggedItemValue(null);
+    setDraggedItemIndex(null);
   };
 
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
-  const handleSortDrop = (e, index) => {
+  const handleSortDrop = (e, targetIndex) => {
     e.preventDefault();
-    const item = e.dataTransfer.getData('text/plain');
+    if (draggedItemIndex !== null && draggedItemValue) {
+      // It's a reorder operation within the right div
+      setRightItems((prevItems) => {
+        const updatedItems = [...prevItems];
+        const [removedItem] = updatedItems.splice(draggedItemIndex, 1);
+        updatedItems.splice(targetIndex, 0, removedItem); // Insert at new index
+        return updatedItems;
+      });
+    } else if (draggedItemValue) {
+      // It's an item from the left div being added
+      setRightItems((prevItems) => {
+        const updatedItems = [...prevItems];
+        updatedItems.splice(targetIndex, 0, draggedItemValue);
+        return updatedItems;
+      });
+    }
 
-    // Rearrange the items
-    setRightItems((prev) => {
-      const newItems = prev.filter((i) => i !== item);
-      newItems.splice(index, 0, item);
-      return newItems;
-    });
+    setDraggedItemValue(null);
+    setDraggedItemIndex(null);
   };
 
   const handleDelete = (index) => {
@@ -56,11 +77,10 @@ const App = () => {
 
   const handleSave = () => {
     localStorage.setItem('rightItems', JSON.stringify(rightItems));
-    localStorage.setItem('rightDivBgColor', rightDivBgColor); // Save background color
+    localStorage.setItem('rightDivBgColor', rightDivBgColor);
     alert('Items and background color saved to localStorage!');
   };
 
-  // Handle item click, preventing it from triggering the right div click
   const handleItemClick = (e, index, item) => {
     e.stopPropagation(); // Stop event from bubbling up to the right div
     setSelectedItemInfo({ index, value: item });
@@ -68,7 +88,7 @@ const App = () => {
   };
 
   const handleRightDivClick = () => {
-    setShowRightDivInfo(true); // Show right div info when right div is clicked
+    setShowRightDivInfo(true);
   };
 
   const handleBgColorChange = (e) => {
@@ -93,7 +113,7 @@ const App = () => {
           <div
             key={index}
             draggable
-            onDragStart={(e) => handleDragStart(e, item)}
+            onDragStart={(e) => handleDragStart(e, item, 'left')}
             style={{
               padding: '5px',
               margin: '5px',
@@ -111,8 +131,8 @@ const App = () => {
           width: '200px',
           height: '400px',
           border: '1px solid black',
-          display:'flex',
-          flexDirection:'column',
+          display: 'flex',
+          flexDirection: 'column',
           padding: '10px',
           overflowY: 'scroll',
           backgroundColor: rightDivBgColor, // Background color is dynamic
@@ -126,7 +146,7 @@ const App = () => {
           <div
             key={index}
             draggable
-            onDragStart={(e) => handleDragStart(e, item, index)}
+            onDragStart={(e) => handleDragStart(e, item, 'right', index)}
             onDrop={(e) => handleSortDrop(e, index)}
             onDragOver={handleDragOver}
             onClick={(e) => handleItemClick(e, index, item)} // Click handler for items
@@ -138,6 +158,7 @@ const App = () => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              border: selectedItemInfo.index === index ? '2px solid dodgerblue' : 'none',
             }}
           >
             {item}
