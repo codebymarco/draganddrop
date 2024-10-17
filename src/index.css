@@ -46,6 +46,7 @@ body {
 .right-item-type-one {
   display: flex;
   justify-content: center;
+  background-color: transparent;
 }
 
 .right-item-type-two {
