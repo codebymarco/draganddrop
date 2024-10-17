@@ -6,7 +6,7 @@ const App = () => {
     "subheading",
     "button",
     "textarea",
-    "input"
+    "input",
   ]);
   const [rightItems, setRightItems] = useState([]);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
@@ -110,7 +110,7 @@ const App = () => {
     <div
       style={{
         display: "flex",
-        gap:"30px",
+        gap: "30px",
         justifyContent: "space-between",
         padding: "20px",
       }}
@@ -124,7 +124,7 @@ const App = () => {
           overflowY: "scroll",
         }}
       >
-        <h3>Left Div (Draggable Items)</h3>
+        <h3>Components(drag)</h3>
         {leftItems.map((item, index) => (
           <div
             key={index}
@@ -157,7 +157,7 @@ const App = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <h3>Right Div (Dropped Items)</h3>
+        <h3>Form</h3>
         {rightItems.map((item, index) => (
           <div
             key={index}
@@ -199,10 +199,10 @@ const App = () => {
           padding: "10px",
         }}
       >
-        <h3>Selected Info</h3>
+        <h3>Component Info</h3>
         {showRightDivInfo ? (
           <div>
-            <p>Right Div Background Color: {rightDivBgColor}</p>
+            <p>Background Color: {rightDivBgColor}</p>
             <input
               type="color"
               value={rightDivBgColor}
@@ -214,6 +214,34 @@ const App = () => {
           <div>
             <p>Index: {selectedItemInfo.index}</p>
             <p>Value: {selectedItemInfo.value}</p>
+            {selectedItemInfo.value === "heading" ? (
+              <>
+              <input placeholder="subheading" />
+              <p>font-color: <input type="color" /></p>
+</>            ) : null}
+            {selectedItemInfo.value === "subheading" ? (
+              <>
+                            <input placeholder="subheading" />
+                            <p>font-color: <input type="color" /></p>
+              </>
+            ) : null}
+            {selectedItemInfo.value === "button" ? (
+              <input placeholder="text" />
+            ) : null}
+            {selectedItemInfo.value === "input" ? (
+              <>
+                {" "}
+                <input placeholder="placeholder" />
+                <p>required <button>click</button></p>
+              </>
+            ) : null}
+                        {selectedItemInfo.value === "textarea" ? (
+              <>
+                {" "}
+                <input placeholder="placeholder" />
+                <p>required <button>click</button></p>
+              </>
+            ) : null}
           </div>
         ) : (
           <p>No item selected</p>
