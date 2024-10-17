@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const App = () => {
-
-  const [text, setText] = useState("")
+  const [text, setText] = useState("");
 
   const [layout, setLayout] = useState("one");
 
@@ -109,6 +108,7 @@ const App = () => {
   const handleItemClick = (e, index, item) => {
     e.stopPropagation(); // Stop event from bubbling up to the right div
     setSelectedItemInfo({ index, value: item });
+    setText(item.text);
     setShowRightDivInfo(false); // Hide right div info when item is clicked
   };
 
@@ -120,6 +120,24 @@ const App = () => {
     const newColor = e.target.value;
     setRightDivBgColor(newColor);
     localStorage.setItem("rightDivBgColor", newColor); // Save the new background color
+  };
+
+  const saveText = () => {
+    console.log("selected", selectedItemInfo);
+    console.log("text value", text);
+
+    // Use map to create a new array where only the item with the matching index is updated
+    const updatedRightItems = rightItems.map((item, index) => {
+      if (index === selectedItemInfo.index) {
+        // Update the text value of the selected item
+        return { ...item, text: text };
+      }
+      // Return the unchanged item for other indices
+      return item;
+    });
+
+    // Set the updated array to state or perform necessary actions
+    setRightItems(updatedRightItems); // Assuming you are using React state
   };
 
   return (
@@ -215,7 +233,7 @@ const App = () => {
                     : "none",
               }}
             >
-              {item.value}
+              {item.text}
               <button
                 onClick={() => handleDelete(index)}
                 style={{ marginLeft: "10px" }}
@@ -250,19 +268,12 @@ const App = () => {
               <p>Index: {selectedItemInfo.index}</p>
               <p>Type: {selectedItemInfo.value.value}</p>
 
-              <input placeholder="subheading" />
-              <p>
-                font-color: <input type="color" />
-              </p>
-
-              <input placeholder="subheading" />
-
-              <input placeholder="text" />
-
-              <input placeholder="placeholder" />
-              <p>
-                required <button>click</button>
-              </p>
+              <input
+                placeholder="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
+              <button onClick={saveText}>save</button>
             </div>
           ) : (
             <p>No item selected</p>
