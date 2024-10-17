@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 const App = () => {
+
+  const [text, setText] = useState("")
+
   const [layout, setLayout] = useState("one");
 
   const [leftItems] = useState([
@@ -51,7 +54,7 @@ const App = () => {
       const added = {
         value: draggedItemValue,
         req: false,
-        text: "default",
+        text: draggedItemValue,
       };
 
       setRightItems((prevItems) => [...prevItems, added]);
