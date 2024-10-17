@@ -48,8 +48,12 @@ const App = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     if (draggedItemIndex === null && draggedItemValue) {
-      // It's an item from the left div (new addition)
-      setRightItems((prevItems) => [...prevItems, draggedItemValue]);
+
+      const added = {
+        value:draggedItemValue
+      }
+
+      setRightItems((prevItems) => [...prevItems, added]);
     }
     setDraggedItemValue(null);
     setDraggedItemIndex(null);
@@ -207,7 +211,7 @@ const App = () => {
                     : "none",
               }}
             >
-              {item}
+              {item.value}
               <button
                 onClick={() => handleDelete(index)}
                 style={{ marginLeft: "10px" }}
@@ -240,7 +244,7 @@ const App = () => {
           ) : selectedItemInfo.index !== null ? (
             <div>
               <p>Index: {selectedItemInfo.index}</p>
-              <p>Value: {selectedItemInfo.value}</p>
+              <p>Value: {selectedItemInfo.value.value}</p>
               {selectedItemInfo.value === "heading" ? (
                 <>
                   <input placeholder="subheading" />
