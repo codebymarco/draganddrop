@@ -4,9 +4,9 @@ const App = () => {
   const [leftItems] = useState([
     "heading",
     "subheading",
-    "input",
-    "input",
-    "input",
+    "button",
+    "textarea",
+    "input"
   ]);
   const [rightItems, setRightItems] = useState([]);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
@@ -110,6 +110,7 @@ const App = () => {
     <div
       style={{
         display: "flex",
+        gap:"30px",
         justifyContent: "space-between",
         padding: "20px",
       }}
@@ -143,7 +144,7 @@ const App = () => {
 
       <div
         style={{
-          width: "200px",
+          width: "500px",
           height: "400px",
           border: "1px solid black",
           display: "flex",
