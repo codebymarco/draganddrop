@@ -213,6 +213,18 @@ const App = () => {
           <h3>Form</h3>
           {rightItems.map((item, index) => (
             <div
+              className={`right-item ${
+                item.value === "heading"
+                  ? `right-item-type-one`
+                  :
+                  item.value === "subheading"
+                  ? `right-item-type-one`
+                  :
+                  item.value === "button"
+                  ? `right-item-type-one`
+                  :
+                   `right-item-type-two`
+              }`}
               key={index}
               draggable
               onDragStart={(e) => handleDragStart(e, item, "right", index)}
@@ -220,13 +232,6 @@ const App = () => {
               onDragOver={handleDragOver}
               onClick={(e) => handleItemClick(e, index, item)} // Click handler for items
               style={{
-                padding: "5px",
-                margin: "5px",
-                backgroundColor: "#c0c0c0",
-                cursor: "grab",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
                 border:
                   selectedItemInfo.index === index
                     ? "2px solid dodgerblue"

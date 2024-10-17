@@ -1,21 +1,21 @@
-body{
+body {
   margin: 0;
   padding: 0;
 }
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.page{
+.page {
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.top{
+.top {
   padding: 10px;
   background-color: aquamarine;
   display: flex;
@@ -24,11 +24,37 @@ body{
   width: 100%;
 }
 
-.container{
+.container {
   display: flex;
   gap: 30px;
   padding: 20px;
   justify-content: space-between;
-  background-color:azure;
+  background-color: azure;
   flex-grow: 1;
+}
+
+.right-item {
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding: 5px;
+  margin: 5px;
+  background-color: #c0c0c0;
+  cursor: grab;
+}
+
+.right-item-type-one {
+  display: flex;
+  justify-content: center;
+}
+
+.right-item-type-two {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.right-item button {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
