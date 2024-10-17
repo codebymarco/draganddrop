@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 const App = () => {
+  const [layout, setLayout] = useState("one");
+
   const [leftItems] = useState([
     "heading",
     "subheading",
@@ -90,6 +92,12 @@ const App = () => {
     alert("Items and background color saved to localStorage!");
   };
 
+  const handleRevert = () => {
+    localStorage.setItem("rightItems", JSON.stringify(rightItems));
+    localStorage.setItem("rightDivBgColor", rightDivBgColor);
+    alert("Items and background color saved to localStorage!");
+  };
+
   const handleItemClick = (e, index, item) => {
     e.stopPropagation(); // Stop event from bubbling up to the right div
     setSelectedItemInfo({ index, value: item });
@@ -110,157 +118,172 @@ const App = () => {
     <div className="page">
       <div className="top">
         <h1>form builder</h1>
-      <button onClick={handleSave} style={{ marginTop: "20px" }}>
-        Save
-      </button>
+        <div>
+          {layout}
+          <select
+            name=""
+            id=""
+            value={layout}
+            onChange={(e) => setLayout(e.target.value)}
+          >
+            <option value="one">layout1</option>
+            <option value="two">layout2</option>
+          </select>
+          <button onClick={handleRevert} style={{ marginTop: "20px" }}>
+            Revert
+          </button>
+          <button onClick={handleSave} style={{ marginTop: "20px" }}>
+            Save
+          </button>
+        </div>
       </div>
 
       <div className="container">
-      <div
-        style={{
-          width: "200px",
-          height: "400px",
-          border: "1px solid black",
-          padding: "10px",
-          overflowY: "scroll",
-          height: "100%",
-        }}
-      >
-        <h3>Components(drag)</h3>
-        {leftItems.map((item, index) => (
-          <div
-            key={index}
-            draggable
-            onDragStart={(e) => handleDragStart(e, item, "left")}
-            style={{
-              padding: "5px",
-              margin: "5px",
-              backgroundColor: "#e0e0e0",
-              cursor: "grab",
-            }}
-          >
-            {item}
-          </div>
-        ))}
-      </div>
-
-      <div
-        style={{
-          width: "500px",
-          height: "100%",
-          border: "1px solid black",
-          display: "flex",
-          flexDirection: "column",
-          flexGrow: "1",
-          padding: "10px",
-          overflowY: "scroll",
-          backgroundColor: rightDivBgColor, // Background color is dynamic
-        }}
-        onClick={handleRightDivClick} // Click handler for the right div
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-      >
-        <h3>Form</h3>
-        {rightItems.map((item, index) => (
-          <div
-            key={index}
-            draggable
-            onDragStart={(e) => handleDragStart(e, item, "right", index)}
-            onDrop={(e) => handleSortDrop(e, index)}
-            onDragOver={handleDragOver}
-            onClick={(e) => handleItemClick(e, index, item)} // Click handler for items
-            style={{
-              padding: "5px",
-              margin: "5px",
-              backgroundColor: "#c0c0c0",
-              cursor: "grab",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              border:
-                selectedItemInfo.index === index
-                  ? "2px solid dodgerblue"
-                  : "none",
-            }}
-          >
-            {item}
-            <button
-              onClick={() => handleDelete(index)}
-              style={{ marginLeft: "10px" }}
+        <div
+          style={{
+            width: "200px",
+            height: "400px",
+            border: "1px solid black",
+            padding: "10px",
+            overflowY: "scroll",
+            height: "100%",
+          }}
+        >
+          <h3>Components(drag)</h3>
+          {leftItems.map((item, index) => (
+            <div
+              key={index}
+              draggable
+              onDragStart={(e) => handleDragStart(e, item, "left")}
+              style={{
+                padding: "5px",
+                margin: "5px",
+                backgroundColor: "#e0e0e0",
+                cursor: "grab",
+              }}
             >
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
+              {item}
+            </div>
+          ))}
+        </div>
 
-      <div
-        style={{
-          width: "300px",
-          height: "100%",
-          border: "1px solid black",
-          padding: "10px",
-        }}
-      >
-        <h3>Component Info</h3>
-        {showRightDivInfo ? (
-          <div>
-            <p>Background Color: {rightDivBgColor}</p>
-            <input
-              type="color"
-              value={rightDivBgColor}
-              onChange={handleBgColorChange}
-              style={{ marginTop: "10px" }}
-            />
-          </div>
-        ) : selectedItemInfo.index !== null ? (
-          <div>
-            <p>Index: {selectedItemInfo.index}</p>
-            <p>Value: {selectedItemInfo.value}</p>
-            {selectedItemInfo.value === "heading" ? (
-              <>
-                <input placeholder="subheading" />
-                <p>
-                  font-color: <input type="color" />
-                </p>
-              </>
-            ) : null}
-            {selectedItemInfo.value === "subheading" ? (
-              <>
-                <input placeholder="subheading" />
-                <p>
-                  font-color: <input type="color" />
-                </p>
-              </>
-            ) : null}
-            {selectedItemInfo.value === "button" ? (
-              <input placeholder="text" />
-            ) : null}
-            {selectedItemInfo.value === "input" ? (
-              <>
-                {" "}
-                <input placeholder="placeholder" />
-                <p>
-                  required <button>click</button>
-                </p>
-              </>
-            ) : null}
-            {selectedItemInfo.value === "textarea" ? (
-              <>
-                {" "}
-                <input placeholder="placeholder" />
-                <p>
-                  required <button>click</button>
-                </p>
-              </>
-            ) : null}
-          </div>
-        ) : (
-          <p>No item selected</p>
-        )}
-      </div>
-      </div>
+        <div
+          style={{
+            width: "500px",
+            height: "100%",
+            border: "1px solid black",
+            display: "flex",
+            flexDirection:
+              layout === "one" ? "column" : layout === "two" ? "row" : "row",
+            flexGrow: "1",
+            padding: "10px",
+            overflowY: "scroll",
+            backgroundColor: rightDivBgColor, // Background color is dynamic
+          }}
+          onClick={handleRightDivClick} // Click handler for the right div
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
+          <h3>Form</h3>
+          {rightItems.map((item, index) => (
+            <div
+              key={index}
+              draggable
+              onDragStart={(e) => handleDragStart(e, item, "right", index)}
+              onDrop={(e) => handleSortDrop(e, index)}
+              onDragOver={handleDragOver}
+              onClick={(e) => handleItemClick(e, index, item)} // Click handler for items
+              style={{
+                padding: "5px",
+                margin: "5px",
+                backgroundColor: "#c0c0c0",
+                cursor: "grab",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                border:
+                  selectedItemInfo.index === index
+                    ? "2px solid dodgerblue"
+                    : "none",
+              }}
+            >
+              {item}
+              <button
+                onClick={() => handleDelete(index)}
+                style={{ marginLeft: "10px" }}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
 
+        <div
+          style={{
+            width: "300px",
+            height: "100%",
+            border: "1px solid black",
+            padding: "10px",
+          }}
+        >
+          <h3>Component Info</h3>
+          {showRightDivInfo ? (
+            <div>
+              <p>Background Color: {rightDivBgColor}</p>
+              <input
+                type="color"
+                value={rightDivBgColor}
+                onChange={handleBgColorChange}
+                style={{ marginTop: "10px" }}
+              />
+            </div>
+          ) : selectedItemInfo.index !== null ? (
+            <div>
+              <p>Index: {selectedItemInfo.index}</p>
+              <p>Value: {selectedItemInfo.value}</p>
+              {selectedItemInfo.value === "heading" ? (
+                <>
+                  <input placeholder="subheading" />
+                  <p>
+                    font-color: <input type="color" />
+                  </p>
+                </>
+              ) : null}
+              {selectedItemInfo.value === "subheading" ? (
+                <>
+                  <input placeholder="subheading" />
+                  <p>
+                    font-color: <input type="color" />
+                  </p>
+                </>
+              ) : null}
+              {selectedItemInfo.value === "button" ? (
+                <input placeholder="text" />
+              ) : null}
+              {selectedItemInfo.value === "input" ? (
+                <>
+                  {" "}
+                  <input placeholder="placeholder" />
+                  <p>
+                    required <button>click</button>
+                  </p>
+                </>
+              ) : null}
+              {selectedItemInfo.value === "textarea" ? (
+                <>
+                  {" "}
+                  <input placeholder="placeholder" />
+                  <p>
+                    required <button>click</button>
+                  </p>
+                </>
+              ) : null}
+            </div>
+          ) : (
+            <p>No item selected</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
