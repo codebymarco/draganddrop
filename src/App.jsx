@@ -107,14 +107,15 @@ const App = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "30px",
-        justifyContent: "space-between",
-        padding: "20px",
-      }}
-    >
+    <div className="page">
+      <div className="top">
+        <h1>form builder</h1>
+      <button onClick={handleSave} style={{ marginTop: "20px" }}>
+        Save
+      </button>
+      </div>
+
+      <div className="container">
       <div
         style={{
           width: "200px",
@@ -122,6 +123,7 @@ const App = () => {
           border: "1px solid black",
           padding: "10px",
           overflowY: "scroll",
+          height: "100%",
         }}
       >
         <h3>Components(drag)</h3>
@@ -145,10 +147,11 @@ const App = () => {
       <div
         style={{
           width: "500px",
-          height: "400px",
+          height: "100%",
           border: "1px solid black",
           display: "flex",
           flexDirection: "column",
+          flexGrow: "1",
           padding: "10px",
           overflowY: "scroll",
           backgroundColor: rightDivBgColor, // Background color is dynamic
@@ -193,8 +196,8 @@ const App = () => {
 
       <div
         style={{
-          width: "200px",
-          height: "400px",
+          width: "300px",
+          height: "100%",
           border: "1px solid black",
           padding: "10px",
         }}
@@ -216,13 +219,18 @@ const App = () => {
             <p>Value: {selectedItemInfo.value}</p>
             {selectedItemInfo.value === "heading" ? (
               <>
-              <input placeholder="subheading" />
-              <p>font-color: <input type="color" /></p>
-</>            ) : null}
+                <input placeholder="subheading" />
+                <p>
+                  font-color: <input type="color" />
+                </p>
+              </>
+            ) : null}
             {selectedItemInfo.value === "subheading" ? (
               <>
-                            <input placeholder="subheading" />
-                            <p>font-color: <input type="color" /></p>
+                <input placeholder="subheading" />
+                <p>
+                  font-color: <input type="color" />
+                </p>
               </>
             ) : null}
             {selectedItemInfo.value === "button" ? (
@@ -232,14 +240,18 @@ const App = () => {
               <>
                 {" "}
                 <input placeholder="placeholder" />
-                <p>required <button>click</button></p>
+                <p>
+                  required <button>click</button>
+                </p>
               </>
             ) : null}
-                        {selectedItemInfo.value === "textarea" ? (
+            {selectedItemInfo.value === "textarea" ? (
               <>
                 {" "}
                 <input placeholder="placeholder" />
-                <p>required <button>click</button></p>
+                <p>
+                  required <button>click</button>
+                </p>
               </>
             ) : null}
           </div>
@@ -247,10 +259,8 @@ const App = () => {
           <p>No item selected</p>
         )}
       </div>
+      </div>
 
-      <button onClick={handleSave} style={{ marginTop: "20px" }}>
-        Save
-      </button>
     </div>
   );
 };
