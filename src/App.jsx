@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const App = () => {
-  const [leftItems] = useState(['Item 1', 'Item 2', 'Item 3']);
+  const [leftItems] = useState([
+    "heading",
+    "subheading",
+    "input",
+    "input",
+    "input",
+  ]);
   const [rightItems, setRightItems] = useState([]);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
   const [draggedItemValue, setDraggedItemValue] = useState(null);
-  const [selectedItemInfo, setSelectedItemInfo] = useState({ index: null, value: null });
-  const [rightDivBgColor, setRightDivBgColor] = useState('#c0c0c0');
+  const [selectedItemInfo, setSelectedItemInfo] = useState({
+    index: null,
+    value: null,
+  });
+  const [rightDivBgColor, setRightDivBgColor] = useState("#c0c0c0");
   const [showRightDivInfo, setShowRightDivInfo] = useState(false);
 
   useEffect(() => {
-    const savedItems = JSON.parse(localStorage.getItem('rightItems'));
-    const savedBgColor = localStorage.getItem('rightDivBgColor');
+    const savedItems = JSON.parse(localStorage.getItem("rightItems"));
+    const savedBgColor = localStorage.getItem("rightDivBgColor");
 
     if (savedItems) {
       setRightItems(savedItems);
@@ -23,12 +32,12 @@ const App = () => {
   }, []);
 
   const handleDragStart = (e, item, source, index = null) => {
-    e.dataTransfer.effectAllowed = 'move';
-    
-    if (source === 'left') {
+    e.dataTransfer.effectAllowed = "move";
+
+    if (source === "left") {
       setDraggedItemValue(item);
       setDraggedItemIndex(null); // No index from the left div
-    } else if (source === 'right') {
+    } else if (source === "right") {
       setDraggedItemIndex(index);
       setDraggedItemValue(item); // Store item and index when dragging from right
     }
@@ -76,9 +85,9 @@ const App = () => {
   };
 
   const handleSave = () => {
-    localStorage.setItem('rightItems', JSON.stringify(rightItems));
-    localStorage.setItem('rightDivBgColor', rightDivBgColor);
-    alert('Items and background color saved to localStorage!');
+    localStorage.setItem("rightItems", JSON.stringify(rightItems));
+    localStorage.setItem("rightDivBgColor", rightDivBgColor);
+    alert("Items and background color saved to localStorage!");
   };
 
   const handleItemClick = (e, index, item) => {
@@ -94,18 +103,24 @@ const App = () => {
   const handleBgColorChange = (e) => {
     const newColor = e.target.value;
     setRightDivBgColor(newColor);
-    localStorage.setItem('rightDivBgColor', newColor); // Save the new background color
+    localStorage.setItem("rightDivBgColor", newColor); // Save the new background color
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px' }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "20px",
+      }}
+    >
       <div
         style={{
-          width: '200px',
-          height: '400px',
-          border: '1px solid black',
-          padding: '10px',
-          overflowY: 'scroll',
+          width: "200px",
+          height: "400px",
+          border: "1px solid black",
+          padding: "10px",
+          overflowY: "scroll",
         }}
       >
         <h3>Left Div (Draggable Items)</h3>
@@ -113,12 +128,12 @@ const App = () => {
           <div
             key={index}
             draggable
-            onDragStart={(e) => handleDragStart(e, item, 'left')}
+            onDragStart={(e) => handleDragStart(e, item, "left")}
             style={{
-              padding: '5px',
-              margin: '5px',
-              backgroundColor: '#e0e0e0',
-              cursor: 'grab',
+              padding: "5px",
+              margin: "5px",
+              backgroundColor: "#e0e0e0",
+              cursor: "grab",
             }}
           >
             {item}
@@ -128,13 +143,13 @@ const App = () => {
 
       <div
         style={{
-          width: '200px',
-          height: '400px',
-          border: '1px solid black',
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '10px',
-          overflowY: 'scroll',
+          width: "200px",
+          height: "400px",
+          border: "1px solid black",
+          display: "flex",
+          flexDirection: "column",
+          padding: "10px",
+          overflowY: "scroll",
           backgroundColor: rightDivBgColor, // Background color is dynamic
         }}
         onClick={handleRightDivClick} // Click handler for the right div
@@ -146,23 +161,29 @@ const App = () => {
           <div
             key={index}
             draggable
-            onDragStart={(e) => handleDragStart(e, item, 'right', index)}
+            onDragStart={(e) => handleDragStart(e, item, "right", index)}
             onDrop={(e) => handleSortDrop(e, index)}
             onDragOver={handleDragOver}
             onClick={(e) => handleItemClick(e, index, item)} // Click handler for items
             style={{
-              padding: '5px',
-              margin: '5px',
-              backgroundColor: '#c0c0c0',
-              cursor: 'grab',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              border: selectedItemInfo.index === index ? '2px solid dodgerblue' : 'none',
+              padding: "5px",
+              margin: "5px",
+              backgroundColor: "#c0c0c0",
+              cursor: "grab",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border:
+                selectedItemInfo.index === index
+                  ? "2px solid dodgerblue"
+                  : "none",
             }}
           >
             {item}
-            <button onClick={() => handleDelete(index)} style={{ marginLeft: '10px' }}>
+            <button
+              onClick={() => handleDelete(index)}
+              style={{ marginLeft: "10px" }}
+            >
               Delete
             </button>
           </div>
@@ -171,10 +192,10 @@ const App = () => {
 
       <div
         style={{
-          width: '200px',
-          height: '400px',
-          border: '1px solid black',
-          padding: '10px',
+          width: "200px",
+          height: "400px",
+          border: "1px solid black",
+          padding: "10px",
         }}
       >
         <h3>Selected Info</h3>
@@ -185,7 +206,7 @@ const App = () => {
               type="color"
               value={rightDivBgColor}
               onChange={handleBgColorChange}
-              style={{ marginTop: '10px' }}
+              style={{ marginTop: "10px" }}
             />
           </div>
         ) : selectedItemInfo.index !== null ? (
@@ -198,7 +219,7 @@ const App = () => {
         )}
       </div>
 
-      <button onClick={handleSave} style={{ marginTop: '20px' }}>
+      <button onClick={handleSave} style={{ marginTop: "20px" }}>
         Save
       </button>
     </div>
