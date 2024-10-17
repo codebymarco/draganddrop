@@ -48,10 +48,11 @@ const App = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     if (draggedItemIndex === null && draggedItemValue) {
-
       const added = {
-        value:draggedItemValue
-      }
+        value: draggedItemValue,
+        req: false,
+        text: "default",
+      };
 
       setRightItems((prevItems) => [...prevItems, added]);
     }
@@ -244,44 +245,21 @@ const App = () => {
           ) : selectedItemInfo.index !== null ? (
             <div>
               <p>Index: {selectedItemInfo.index}</p>
-              <p>Value: {selectedItemInfo.value.value}</p>
-              {selectedItemInfo.value === "heading" ? (
-                <>
-                  <input placeholder="subheading" />
-                  <p>
-                    font-color: <input type="color" />
-                  </p>
-                </>
-              ) : null}
-              {selectedItemInfo.value === "subheading" ? (
-                <>
-                  <input placeholder="subheading" />
-                  <p>
-                    font-color: <input type="color" />
-                  </p>
-                </>
-              ) : null}
-              {selectedItemInfo.value === "button" ? (
-                <input placeholder="text" />
-              ) : null}
-              {selectedItemInfo.value === "input" ? (
-                <>
-                  {" "}
-                  <input placeholder="placeholder" />
-                  <p>
-                    required <button>click</button>
-                  </p>
-                </>
-              ) : null}
-              {selectedItemInfo.value === "textarea" ? (
-                <>
-                  {" "}
-                  <input placeholder="placeholder" />
-                  <p>
-                    required <button>click</button>
-                  </p>
-                </>
-              ) : null}
+              <p>Type: {selectedItemInfo.value.value}</p>
+
+              <input placeholder="subheading" />
+              <p>
+                font-color: <input type="color" />
+              </p>
+
+              <input placeholder="subheading" />
+
+              <input placeholder="text" />
+
+              <input placeholder="placeholder" />
+              <p>
+                required <button>click</button>
+              </p>
             </div>
           ) : (
             <p>No item selected</p>
