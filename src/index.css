@@ -51,6 +51,18 @@ body {
 .right-item-type-two {
   display: flex;
   justify-content: flex-start;
+  background-color: azure;
+  border: 1px solid black;
+  color: gray;
+}
+
+.right-item-type-three {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px;
 }
 
 .right-item button {

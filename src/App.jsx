@@ -216,14 +216,11 @@ const App = () => {
               className={`right-item ${
                 item.value === "heading"
                   ? `right-item-type-one`
-                  :
-                  item.value === "subheading"
+                  : item.value === "subheading"
                   ? `right-item-type-one`
-                  :
-                  item.value === "button"
-                  ? `right-item-type-one`
-                  :
-                   `right-item-type-two`
+                  : item.value === "button"
+                  ? `right-item-type-three`
+                  : `right-item-type-two`
               }`}
               key={index}
               draggable
@@ -235,16 +232,18 @@ const App = () => {
                 border:
                   selectedItemInfo.index === index
                     ? "2px solid dodgerblue"
-                    : "none",
+                    : "1px solid black",
               }}
             >
               {item.text}
-              <button
-                onClick={() => handleDelete(index)}
-                style={{ marginLeft: "10px" }}
-              >
-                Delete
-              </button>
+              {item.value !== "button" ? (
+                <button
+                  onClick={() => handleDelete(index)}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Delete
+                </button>
+              ) : null}
             </div>
           ))}
         </div>
