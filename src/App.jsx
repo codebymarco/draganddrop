@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const App = () => {
   const [text, setText] = useState("");
+  const [req, setReq] = useState(false);
 
   const [layout, setLayout] = useState("one");
 
@@ -109,6 +110,7 @@ const App = () => {
     e.stopPropagation(); // Stop event from bubbling up to the right div
     setSelectedItemInfo({ index, value: item });
     setText(item.text);
+    setReq(item.req);
     setShowRightDivInfo(false); // Hide right div info when item is clicked
   };
 
@@ -130,7 +132,7 @@ const App = () => {
     const updatedRightItems = rightItems.map((item, index) => {
       if (index === selectedItemInfo.index) {
         // Update the text value of the selected item
-        return { ...item, text: text };
+        return { ...item, text: text, req:req };
       }
       // Return the unchanged item for other indices
       return item;
@@ -277,6 +279,11 @@ const App = () => {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
               />
+              {req ? (
+                <button onClick={() => setReq(false)}>make unrequired</button>
+              ) : (
+                <button onClick={() => setReq(true)}>make required</button>
+              )}
               <button onClick={saveText}>save</button>
             </div>
           ) : (
